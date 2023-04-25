@@ -27,9 +27,6 @@ const options = {
     } else {
       Notiflix.Notify.failure('Please choose a date in the future');
     }
-
-    const deltaDays = futureDate - currentDate;
-    console.log(deltaDays.toString());
   },
 };
 
@@ -41,29 +38,39 @@ function convertMs(ms) {
   const hour = minute * 60;
   const day = hour * 24;
 
-  const days = Math.floor(ms / day);
-  const hours = Math.floor((ms % day) / hour);
-  const minutes = Math.floor(((ms % day) % hour) / minute);
-  const seconds = Math.floor((((ms % day) % hour) % minute) / second);
+  const days = addLeadingZero(Math.floor(ms / day));
+  const hours = addLeadingZero(Math.floor((ms % day) / hour));
+  const minutes = addLeadingZero(Math.floor(((ms % day) % hour) / minute));
+  const seconds = addLeadingZero(
+    Math.floor((((ms % day) % hour) % minute) / second)
+  );
 
   return { days, hours, minutes, seconds };
 }
-
-// const { days, hours, minutes, seconds } = convertMs();
 
 btnStart.addEventListener('click', chooseDateStartOnClick);
 
 function chooseDateStartOnClick() {
   const timerId = setInterval(() => {
+    let countdown = null;
+    const delta = fp.selectedDates[0].getTime() - Date.now();
+    const { days, hours, minutes, seconds } = convertMs(delta);
     const currentTime = new Date();
 
-    daysEl.textContent = currentTime.getMinutes().toString().padStart(2, '0');
-    minsEl.textContent = currentTime.getMinutes().toString().padStart(2, '0');
-    secsEl.textContent = currentTime.getSeconds().toString().padStart(2, '0');
-    hoursEl.textContent = currentTime.getHours().toString().padStart(2, '0');
+    daysEl.textContent = `${days}`;
+    minsEl.textContent = `${minutes}`;
+    secsEl.textContent = `${seconds}`;
+    hoursEl.textContent = `${hours}`;
+
+    countdown = `${days}:${hours}:${minutes}:${seconds}`;
+    console.log(countdown);
+
+    if (countdown === 0) {
+      clearInterval(timerId);
+    }
   }, 1000);
 }
 
-// function addLeadingZero(value) {
-//   padStart();
-// }
+function addLeadingZero(value) {
+  return String(value).padStart(2, '0');
+}
