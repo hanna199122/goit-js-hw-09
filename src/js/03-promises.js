@@ -15,15 +15,9 @@ function createPromise(position, delay) {
 
     setTimeout(() => {
       if (shouldResolve) {
-        res(
-          Notiflix.Notify.success(
-            `✅ Fulfield promise ${position} in ${delay}ms`
-          )
-        );
+        res({ position, delay });
       } else {
-        rej(
-          Notiflix.Notify.failure(`❌ Reject promise ${position} in ${delay}ms`)
-        );
+        rej({ position, delay });
       }
     }, delay);
   });
@@ -33,14 +27,20 @@ function onFormCreatePromises(evt) {
   evt.preventDefault();
   let delay = Number(inputDelay.value);
   let amount = Number(inputAmount.value);
-  let step = Number(inputAmount.value);
+  let step = Number(inputStep.value);
 
-  for (let position = 0; position < amount; position += 1) {
-    // console.log(position);
+  for (let position = 1; position <= amount; position += 1) {
+    console.log(position);
 
     createPromise(position, delay)
-      .then(result => console.log(result))
-      .catch(err => console.log(err));
-    // console.log(delay, amount, step);
+      .then(({ position, delay }) => {
+        Notiflix.Notify.success(
+          `✅ Fulfield promise ${position} in ${delay}ms`
+        );
+      })
+      .catch(({ position, delay }) => {
+        Notiflix.Notify.failure(`❌ Reject promise ${position} in ${delay}ms`);
+      });
   }
+  console.log(delay, step, amount);
 }
