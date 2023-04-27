@@ -53,6 +53,7 @@ btnStart.addEventListener('click', chooseDateStartOnClick);
 function chooseDateStartOnClick() {
   const timerId = setInterval(() => {
     let countdown = null;
+
     const delta = fp.selectedDates[0].getTime() - Date.now();
     const { days, hours, minutes, seconds } = convertMs(delta);
     const currentTime = new Date();
