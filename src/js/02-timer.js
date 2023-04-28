@@ -20,6 +20,7 @@ const options = {
   onClose(selectedDates) {
     // console.log(selectedDates[0]);
     const futureDate = selectedDates[0].getTime();
+    console.log(futureDate);
     const currentDate = Date.now();
 
     if (futureDate - options.defaultDate.getTime() > 0) {
@@ -37,6 +38,7 @@ function convertMs(ms) {
   const minute = second * 60;
   const hour = minute * 60;
   const day = hour * 24;
+  const finishTime = 0;
 
   const days = addLeadingZero(Math.floor(ms / day));
   const hours = addLeadingZero(Math.floor((ms % day) / hour));
@@ -45,6 +47,7 @@ function convertMs(ms) {
     Math.floor((((ms % day) % hour) % minute) / second)
   );
 
+  // щоб таймер зупинявся, коли досягається кінцева дата, потрібно додатково перевірити, чи час відліку більше за нуль після обчислення за допомогою ф-ції convertMs.Чекаю вашу доопрацовану роботу)
   return { days, hours, minutes, seconds };
 }
 
@@ -64,9 +67,8 @@ function chooseDateStartOnClick() {
     hoursEl.textContent = `${hours}`;
 
     countdown = `${days}:${hours}:${minutes}:${seconds}`;
-    console.log(countdown);
 
-    if (countdown === 0) {
+    if (delta < 1000) {
       clearInterval(timerId);
     }
   }, 1000);
